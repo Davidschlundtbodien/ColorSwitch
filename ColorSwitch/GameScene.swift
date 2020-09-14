@@ -7,83 +7,46 @@
 //
 
 import SpriteKit
-import GameplayKit
 
 class GameScene: SKScene {
     
-    private var label : SKLabelNode?
-    private var spinnyNode : SKShapeNode?
+    var colorSwitch: SKSpriteNode!
     
-    override func didMove(to view: SKView) {
+    override func didMove(to skView: SKView) {
+        setupPhysics()
+        layoutScene()
+    }
+    
+    func setupPhysics() {
+        physicsWorld.gravity = CGVector(dx: 0.0, dy: -2.0)
+    }
+    
+    func layoutScene() {
         
-        // Get label node from scene and store it for use later
-        self.label = self.childNode(withName: "//helloLabel") as? SKLabelNode
-        if let label = self.label {
-            label.alpha = 0.0
-            label.run(SKAction.fadeIn(withDuration: 2.0))
-        }
         
-        // Create shape node to use during mouse interaction
-        let w = (self.size.width + self.size.height) * 0.05
-        self.spinnyNode = SKShapeNode.init(rectOf: CGSize.init(width: w, height: w), cornerRadius: w * 0.3)
+        backgroundColor = UIColor(red: 44/255, green: 62/255, blue: 80/255, alpha: 1.0)
         
-        if let spinnyNode = self.spinnyNode {
-            spinnyNode.lineWidth = 2.5
-            
-            spinnyNode.run(SKAction.repeatForever(SKAction.rotate(byAngle: CGFloat(Double.pi), duration: 1)))
-            spinnyNode.run(SKAction.sequence([SKAction.wait(forDuration: 0.5),
-                                              SKAction.fadeOut(withDuration: 0.5),
-                                              SKAction.removeFromParent()]))
-        }
-    }
-    
-    
-    func touchDown(atPoint pos : CGPoint) {
-        if let n = self.spinnyNode?.copy() as! SKShapeNode? {
-            n.position = pos
-            n.strokeColor = SKColor.green
-            self.addChild(n)
-        }
-    }
-    
-    func touchMoved(toPoint pos : CGPoint) {
-        if let n = self.spinnyNode?.copy() as! SKShapeNode? {
-            n.position = pos
-            n.strokeColor = SKColor.blue
-            self.addChild(n)
-        }
-    }
-    
-    func touchUp(atPoint pos : CGPoint) {
-        if let n = self.spinnyNode?.copy() as! SKShapeNode? {
-            n.position = pos
-            n.strokeColor = SKColor.red
-            self.addChild(n)
-        }
-    }
-    
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        if let label = self.label {
-            label.run(SKAction.init(named: "Pulse")!, withKey: "fadeInOut")
-        }
+        colorSwitch = SKSpriteNode(imageNamed: "ColorCircle")
+        colorSwitch.size = CGSize(width: frame.size.width/3, height: frame.size.height/6)
+        colorSwitch.position = CGPoint(x: frame.midX, y: frame.minY + colorSwitch.size.height)
+        colorSwitch.physicsBody = SKPhysicsBody(circleOfRadius: colorSwitch.size.width/2)
+        colorSwitch.physicsBody?.categoryBitMask = PhysicsCatagories.switchCatagory
+        colorSwitch.physicsBody?.isDynamic = false
+        addChild(colorSwitch)
         
-        for t in touches { self.touchDown(atPoint: t.location(in: self)) }
+        spawnBall()
+        
+        
     }
     
-    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for t in touches { self.touchMoved(toPoint: t.location(in: self)) }
-    }
-    
-    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for t in touches { self.touchUp(atPoint: t.location(in: self)) }
-    }
-    
-    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for t in touches { self.touchUp(atPoint: t.location(in: self)) }
-    }
-    
-    
-    override func update(_ currentTime: TimeInterval) {
-        // Called before each frame is rendered
-    }
+    func spawnBall() {
+        let ball = SKSpriteNode(imageNamed: "ball")
+        ball.size = CGSize(width: 40.0, height: 40.0)
+        ball.position = CGPoint(x: frame.midX, y: frame.maxY)
+        ball.physicsBody = SKPhysicsBody(circleOfRadius: ball.size.width/2)
+        ball.physicsBody?.categoryBitMask = PhysicsCatagories.ballCatagory
+        ball.physicsBody?.contactTestBitMask = PhysicsCatagories.switchCatagory
+        ball.physicsBody?.collisionBitMask = PhysicsCatagories.none
+        addChild(ball)
+     }
 }
