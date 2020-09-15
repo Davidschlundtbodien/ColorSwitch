@@ -21,12 +21,16 @@ enum SwitchState: Int {
     case red, yellow, green, blue
 }
 
+
+
 class GameScene: SKScene {
     
     var colorSwitch: SKSpriteNode!
     var switchState = SwitchState.red
     var currentColorIndex: Int?
     
+    let scoreLabel = SKLabelNode(text: "0")
+    var score = 0
     
     override func didMove(to skView: SKView) {
         setupPhysics()
@@ -34,7 +38,7 @@ class GameScene: SKScene {
     }
     
     func setupPhysics() {
-        physicsWorld.gravity = CGVector(dx: 0.0, dy: -3.0)
+        physicsWorld.gravity = CGVector(dx: 0.0, dy: -1.0)
         physicsWorld.contactDelegate = self
     }
     
@@ -44,25 +48,38 @@ class GameScene: SKScene {
         backgroundColor = UIColor(red: 44/255, green: 62/255, blue: 80/255, alpha: 1.0)
         
         colorSwitch = SKSpriteNode(imageNamed: "ColorCircle")
-        colorSwitch.size = CGSize(width: frame.size.width/3, height: frame.size.height/6)
+        colorSwitch.size = CGSize(width: frame.size.width/4, height: frame.size.height/8.5)
         colorSwitch.position = CGPoint(x: frame.midX, y: frame.minY + colorSwitch.size.height)
         colorSwitch.physicsBody = SKPhysicsBody(circleOfRadius: colorSwitch.size.width/2)
+        colorSwitch.zPosition = ZPositions.colorSwitch
         colorSwitch.physicsBody?.categoryBitMask = PhysicsCatagories.switchCatagory
         colorSwitch.physicsBody?.isDynamic = false
         addChild(colorSwitch)
+        
+        scoreLabel.fontName = "AvenirNext-Bold"
+        scoreLabel.fontSize = 60.0
+        scoreLabel.fontColor = UIColor.white
+        scoreLabel.position = CGPoint(x: frame.midX, y: frame.midY)
+        scoreLabel.zPosition = ZPositions.label
+        addChild(scoreLabel)
         
         spawnBall()
         
     }
     
+    func updateScoreLabel() {
+        scoreLabel.text = "\(score)"
+    }
+    
     func spawnBall() {
         currentColorIndex = Int(arc4random_uniform(UInt32(4)))
         
-        let ball = SKSpriteNode(texture: SKTexture(imageNamed: "ball"), color: PlayColors.colors[currentColorIndex!], size: CGSize(width: 70.0, height: 70.0))
+        let ball = SKSpriteNode(texture: SKTexture(imageNamed: "ball"), color: PlayColors.colors[currentColorIndex!], size: CGSize(width: 30.0, height: 30.0))
         ball.colorBlendFactor = 1.0
         ball.name = "Ball"
         ball.position = CGPoint(x: frame.midX, y: frame.maxY)
         ball.physicsBody = SKPhysicsBody(circleOfRadius: ball.size.width/2)
+        ball.zPosition = ZPositions.ball
         ball.physicsBody?.categoryBitMask = PhysicsCatagories.ballCatagory
         ball.physicsBody?.contactTestBitMask = PhysicsCatagories.switchCatagory
         ball.physicsBody?.collisionBitMask = PhysicsCatagories.none
@@ -80,7 +97,13 @@ class GameScene: SKScene {
     }
     
     func gameOver() {
-        print("You Lose")
+        UserDefaults.standard.set(score, forKey: "Recent Score")
+        if score > UserDefaults.standard.integer(forKey: "Highscore") {
+            UserDefaults.standard.set(score, forKey: "Highscore")
+        }
+        
+        let menuScene = MenuScene(size: view!.bounds.size)
+        view!.presentScene(menuScene)
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -97,7 +120,8 @@ extension GameScene: SKPhysicsContactDelegate {
         if contactMask == PhysicsCatagories.ballCatagory | PhysicsCatagories.switchCatagory {
             if let ball = contact.bodyA.node?.name == "Ball" ? contact.bodyA.node as? SKSpriteNode : contact.bodyB.node as? SKSpriteNode{
                 if currentColorIndex == switchState.rawValue {
-                    print("Correct")
+                    score += 1
+                    updateScoreLabel()
                     ball.run(SKAction.fadeOut(withDuration: 0.25), completion: {ball.removeFromParent()
                         self.spawnBall()
                     })
