@@ -15,6 +15,7 @@
 		554C5921250FDDB800145019 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 554C591F250FDDB800145019 /* LaunchScreen.storyboard */; };
 		554C592925100DAE00145019 /* settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 554C592825100DAE00145019 /* settings.swift */; };
 		554C592B25112A0800145019 /* MenuScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 554C592A25112A0800145019 /* MenuScene.swift */; };
+		554C592D25116B3C00145019 /* bling.wav in Resources */ = {isa = PBXBuildFile; fileRef = 554C592C25116B3C00145019 /* bling.wav */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +29,7 @@
 		554C5922250FDDB800145019 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		554C592825100DAE00145019 /* settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = settings.swift; sourceTree = "<group>"; };
 		554C592A25112A0800145019 /* MenuScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuScene.swift; sourceTree = "<group>"; };
+		554C592C25116B3C00145019 /* bling.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = bling.wav; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -64,6 +66,7 @@
 				554C5916250FDDB600145019 /* GameScene.swift */,
 				554C5918250FDDB600145019 /* GameViewController.swift */,
 				554C592825100DAE00145019 /* settings.swift */,
+				554C592C25116B3C00145019 /* bling.wav */,
 				554C591A250FDDB600145019 /* Main.storyboard */,
 				554C591D250FDDB800145019 /* Assets.xcassets */,
 				554C591F250FDDB800145019 /* LaunchScreen.storyboard */,
@@ -132,6 +135,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				554C591C250FDDB600145019 /* Main.storyboard in Resources */,
+				554C592D25116B3C00145019 /* bling.wav in Resources */,
 				554C591E250FDDB800145019 /* Assets.xcassets in Resources */,
 				554C5921250FDDB800145019 /* LaunchScreen.storyboard in Resources */,
 			);
