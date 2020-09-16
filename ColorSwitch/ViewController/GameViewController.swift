@@ -14,7 +14,6 @@ class GameViewController: UIViewController {
         super.viewDidLoad()
 
         let skView = view as! SKView
-//        let sceneSize = CGSize(width: 1000, height: 2000)
         let scene = MenuScene(size: view.bounds.size)
         
         skView.ignoresSiblingOrder = true

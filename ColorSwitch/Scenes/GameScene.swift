@@ -8,6 +8,7 @@
 
 import SpriteKit
 
+//Ball color array
 enum PlayColors {
     static let colors = [
         UIColor(red: 231/255, green: 76/255, blue: 60/255, alpha: 1.0),
@@ -17,10 +18,10 @@ enum PlayColors {
     ]
 }
 
+// Switch state
 enum SwitchState: Int {
     case red, yellow, green, blue
 }
-
 
 
 class GameScene: SKScene {
@@ -28,25 +29,28 @@ class GameScene: SKScene {
     var colorSwitch: SKSpriteNode!
     var switchState = SwitchState.red
     var currentColorIndex: Int?
-    
     let scoreLabel = SKLabelNode(text: "0")
     var score = 0
+    
     
     override func didMove(to skView: SKView) {
         setupPhysics()
         layoutScene()
     }
     
+    //Gravity for ball
     func setupPhysics() {
-        physicsWorld.gravity = CGVector(dx: 0.0, dy: -1.0)
+        physicsWorld.gravity = CGVector(dx: 0.0, dy: -3.0)
         physicsWorld.contactDelegate = self
     }
     
     func layoutScene() {
         
-        
+
+        //Scene background
         backgroundColor = UIColor(red: 44/255, green: 62/255, blue: 80/255, alpha: 1.0)
         
+        //Color Circle
         colorSwitch = SKSpriteNode(imageNamed: "ColorCircle")
         colorSwitch.size = CGSize(width: frame.size.width/4, height: frame.size.height/8.5)
         colorSwitch.position = CGPoint(x: frame.midX, y: frame.minY + colorSwitch.size.height)
@@ -56,6 +60,7 @@ class GameScene: SKScene {
         colorSwitch.physicsBody?.isDynamic = false
         addChild(colorSwitch)
         
+        //Current Score
         scoreLabel.fontName = "AvenirNext-Bold"
         scoreLabel.fontSize = 60.0
         scoreLabel.fontColor = UIColor.white
@@ -63,14 +68,19 @@ class GameScene: SKScene {
         scoreLabel.zPosition = ZPositions.label
         addChild(scoreLabel)
         
+        //Deploys ball
         spawnBall()
         
     }
     
+    //Current score updating
     func updateScoreLabel() {
         scoreLabel.text = "\(score)"
+        self.physicsWorld.gravity.dy -= 0.1
+        print(physicsWorld.gravity.dy)
     }
     
+    //Ball object
     func spawnBall() {
         currentColorIndex = Int(arc4random_uniform(UInt32(4)))
         
@@ -86,6 +96,7 @@ class GameScene: SKScene {
         addChild(ball)
      }
     
+    //Color Switch rotation
     func turnWheel() {
         if let newState = SwitchState(rawValue: switchState.rawValue + 1) {
             switchState = newState
@@ -96,6 +107,7 @@ class GameScene: SKScene {
         colorSwitch.run(SKAction.rotate(byAngle: .pi/2, duration: 0.25))
     }
     
+    //Game Over w/ transition
     func gameOver() {
         UserDefaults.standard.set(score, forKey: "Recent Score")
         if score > UserDefaults.standard.integer(forKey: "Highscore") {
@@ -103,7 +115,9 @@ class GameScene: SKScene {
         }
         
         let menuScene = MenuScene(size: view!.bounds.size)
-        view!.presentScene(menuScene)
+         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0, execute: {
+            self.view?.presentScene(menuScene)
+         })
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -112,6 +126,7 @@ class GameScene: SKScene {
     
 }
 
+//Contact Logic for ball and colorswitch
 extension GameScene: SKPhysicsContactDelegate {
     
     func didBegin(_ contact: SKPhysicsContact) {
@@ -127,7 +142,10 @@ extension GameScene: SKPhysicsContactDelegate {
                         self.spawnBall()
                     })
                 } else {
+                    ball.physicsBody?.collisionBitMask = PhysicsCatagories.switchCatagory | PhysicsCatagories.ballCatagory
+                    ball.physicsBody?.restitution = 0.7
                     gameOver()
+                    
                 }
             }
         }

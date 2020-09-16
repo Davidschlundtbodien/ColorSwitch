@@ -25,6 +25,7 @@ class MenuScene: SKScene {
     }
     
     func addLabels() {
+        //Tap to play button
         let playLabel = SKLabelNode(text: "Tap to Play!")
         playLabel.fontName = "AvenirNext-Bold"
         playLabel.fontSize = 50.0
@@ -33,6 +34,7 @@ class MenuScene: SKScene {
         addChild(playLabel)
         animate(label: playLabel)
         
+        // Highscore
         let highscoreLabel = SKLabelNode(text: "Highscore: \(UserDefaults.standard.integer(forKey: "Highscore"))")
         highscoreLabel.fontName = "AvenirNext-Bold"
         highscoreLabel.fontSize = 40.0
@@ -40,6 +42,7 @@ class MenuScene: SKScene {
         highscoreLabel.position = CGPoint(x: frame.midX, y: frame.midY - highscoreLabel.frame.size.height*4)
         addChild(highscoreLabel)
         
+        //Recent Score
         let recentScoreLabel = SKLabelNode(text: "Recent Score: \(UserDefaults.standard.integer(forKey: "Recent Score"))")
         recentScoreLabel.fontName = "AvenirNext-Bold"
         recentScoreLabel.fontSize = 40.0
@@ -48,6 +51,7 @@ class MenuScene: SKScene {
         addChild(recentScoreLabel)
     }
     
+    //Pulse animation
     func animate(label: SKLabelNode) {
         let scaleUp = SKAction.scale(to: 1.1, duration: 0.5)
         let scaleDown = SKAction.scale(to: 1.0, duration: 0.5)
@@ -56,6 +60,7 @@ class MenuScene: SKScene {
         label.run(SKAction.repeatForever(sequence))
     }
     
+    //Transition to Game scene
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         let gameScene = GameScene(size: view!.bounds.size)
         view?.presentScene(gameScene)

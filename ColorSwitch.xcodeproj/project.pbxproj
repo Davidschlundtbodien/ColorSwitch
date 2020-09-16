@@ -62,18 +62,50 @@
 		554C590F250FDDB600145019 /* ColorSwitch */ = {
 			isa = PBXGroup;
 			children = (
-				554C5910250FDDB600145019 /* AppDelegate.swift */,
-				554C5916250FDDB600145019 /* GameScene.swift */,
-				554C5918250FDDB600145019 /* GameViewController.swift */,
-				554C592825100DAE00145019 /* settings.swift */,
-				554C592C25116B3C00145019 /* bling.wav */,
-				554C591A250FDDB600145019 /* Main.storyboard */,
-				554C591D250FDDB800145019 /* Assets.xcassets */,
-				554C591F250FDDB800145019 /* LaunchScreen.storyboard */,
 				554C5922250FDDB800145019 /* Info.plist */,
-				554C592A25112A0800145019 /* MenuScene.swift */,
+				554C592825100DAE00145019 /* settings.swift */,
+				555476AC2512728800326303 /* Assets */,
+				554C593125126EC200145019 /* ViewController */,
+				554C593025126EAA00145019 /* Scenes */,
+				554C592F25126E9000145019 /* Template */,
 			);
 			path = ColorSwitch;
+			sourceTree = "<group>";
+		};
+		554C592F25126E9000145019 /* Template */ = {
+			isa = PBXGroup;
+			children = (
+				554C5910250FDDB600145019 /* AppDelegate.swift */,
+			);
+			path = Template;
+			sourceTree = "<group>";
+		};
+		554C593025126EAA00145019 /* Scenes */ = {
+			isa = PBXGroup;
+			children = (
+				554C592A25112A0800145019 /* MenuScene.swift */,
+				554C5916250FDDB600145019 /* GameScene.swift */,
+			);
+			path = Scenes;
+			sourceTree = "<group>";
+		};
+		554C593125126EC200145019 /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				554C5918250FDDB600145019 /* GameViewController.swift */,
+			);
+			path = ViewController;
+			sourceTree = "<group>";
+		};
+		555476AC2512728800326303 /* Assets */ = {
+			isa = PBXGroup;
+			children = (
+				554C591F250FDDB800145019 /* LaunchScreen.storyboard */,
+				554C591A250FDDB600145019 /* Main.storyboard */,
+				554C592C25116B3C00145019 /* bling.wav */,
+				554C591D250FDDB800145019 /* Assets.xcassets */,
+			);
+			path = Assets;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
