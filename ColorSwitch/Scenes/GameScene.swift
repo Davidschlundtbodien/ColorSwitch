@@ -31,6 +31,7 @@ class GameScene: SKScene {
     var currentColorIndex: Int?
     let scoreLabel = SKLabelNode(text: "0")
     var score = 0
+    var directionX: Double?
     
     
     override func didMove(to skView: SKView) {
@@ -58,6 +59,7 @@ class GameScene: SKScene {
         colorSwitch.zPosition = ZPositions.colorSwitch
         colorSwitch.physicsBody?.categoryBitMask = PhysicsCatagories.switchCatagory
         colorSwitch.physicsBody?.isDynamic = false
+        colorSwitch.physicsBody?.friction = 1
         addChild(colorSwitch)
         
         //Current Score
@@ -83,7 +85,8 @@ class GameScene: SKScene {
     //Ball object
     func spawnBall() {
         currentColorIndex = Int(arc4random_uniform(UInt32(4)))
-        
+        directionX = Double.random(in: -2...2)
+            
         let ball = SKSpriteNode(texture: SKTexture(imageNamed: "ball"), color: PlayColors.colors[currentColorIndex!], size: CGSize(width: 30.0, height: 30.0))
         ball.colorBlendFactor = 1.0
         ball.name = "Ball"
@@ -93,7 +96,13 @@ class GameScene: SKScene {
         ball.physicsBody?.categoryBitMask = PhysicsCatagories.ballCatagory
         ball.physicsBody?.contactTestBitMask = PhysicsCatagories.switchCatagory
         ball.physicsBody?.collisionBitMask = PhysicsCatagories.none
+        ball.physicsBody?.allowsRotation = true
+        ball.physicsBody?.friction = 0.2
+        ball.physicsBody?.restitution = 0.3
+        
+        
         addChild(ball)
+        
      }
     
     //Color Switch rotation
@@ -115,7 +124,7 @@ class GameScene: SKScene {
         }
         
         let menuScene = MenuScene(size: view!.bounds.size)
-         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0, execute: {
+         DispatchQueue.main.asyncAfter(deadline: .now() + 2.0, execute: {
             self.view?.presentScene(menuScene)
          })
     }
@@ -143,7 +152,7 @@ extension GameScene: SKPhysicsContactDelegate {
                     })
                 } else {
                     ball.physicsBody?.collisionBitMask = PhysicsCatagories.switchCatagory | PhysicsCatagories.ballCatagory
-                    ball.physicsBody?.restitution = 0.7
+                    ball.physicsBody?.applyImpulse(CGVector(dx: directionX!, dy: -2.0))
                     gameOver()
                     
                 }
