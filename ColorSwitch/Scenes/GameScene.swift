@@ -85,7 +85,7 @@ class GameScene: SKScene {
     //Ball object
     func spawnBall() {
         currentColorIndex = Int(arc4random_uniform(UInt32(4)))
-        directionX = Double.random(in: -2...2)
+        directionX = Double.random(in: -3...3)
             
         let ball = SKSpriteNode(texture: SKTexture(imageNamed: "ball"), color: PlayColors.colors[currentColorIndex!], size: CGSize(width: 30.0, height: 30.0))
         ball.colorBlendFactor = 1.0
@@ -97,8 +97,8 @@ class GameScene: SKScene {
         ball.physicsBody?.contactTestBitMask = PhysicsCatagories.switchCatagory
         ball.physicsBody?.collisionBitMask = PhysicsCatagories.none
         ball.physicsBody?.allowsRotation = true
-        ball.physicsBody?.friction = 0.2
-        ball.physicsBody?.restitution = 0.3
+        ball.physicsBody?.friction = 1
+        ball.physicsBody?.restitution = 0.4
         
         
         addChild(ball)
@@ -122,6 +122,7 @@ class GameScene: SKScene {
         if score > UserDefaults.standard.integer(forKey: "Highscore") {
             UserDefaults.standard.set(score, forKey: "Highscore")
         }
+        scoreLabel.text = "Game Over!"
         
         let menuScene = MenuScene(size: view!.bounds.size)
          DispatchQueue.main.asyncAfter(deadline: .now() + 2.0, execute: {
